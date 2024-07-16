@@ -49,7 +49,6 @@ class D4Controller:
 
     def start(self):
         while True:
-            time.sleep(1)
             self.update_stat()
             print('current status: %s' % self.cur_page)
             if self.cur_page == 'fin':
@@ -74,4 +73,4 @@ class D4Controller:
             elif self.cur_page == 'bingo':
                 adb.click_btn(self.serial, 'pok.png')
             elif self.cur_page == 'live':
-                time.sleep(10)
+                time.sleep(5)
