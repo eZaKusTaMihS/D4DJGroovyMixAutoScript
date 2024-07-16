@@ -74,4 +74,4 @@ class D4Controller:
             elif self.cur_page == 'bingo':
                 adb.click_btn(self.serial, 'pok.png')
             elif self.cur_page == 'live':
-                time.sleep(1)
+                time.sleep(10)
