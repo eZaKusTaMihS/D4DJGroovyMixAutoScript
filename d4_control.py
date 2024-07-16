@@ -2,6 +2,8 @@ import os, time
 import recog
 import adb_control as adb
 
+page_route = 'template\\ui\\pages'
+
 
 def get_screen() -> str:
     sc_path = os.path.join(os.getcwd(), 'temp\\cur_screen.png')
@@ -11,7 +13,7 @@ def get_screen() -> str:
 
 class D4Controller:
     serial = '16416'
-    pages = ['fin', 'network_err', 'loading', 'select', 'prepare', 'play', 'fin', 'again', 'okpop', 'closepop', 'dl']
+    pages = ['okpop', 'closepop', 'fin', 'again', 'select', 'prepare', 'live', 'bingo', 'network_err', 'dl', 'loading']
     cur_page = "none"
     voltage = 0
     event_pt = 0
@@ -27,16 +29,27 @@ class D4Controller:
             "event_pt": self.event_pt
         }
 
-    def update_stat(self):
+    def update_stat(self) -> None:
         screen = get_screen()
+        min_val = 100
+        min_page = 'none'
         for page_name in self.pages:
-            if recog.is_page(screen, page_name):
-                self.cur_page = page_name
-                break
-        pass
+            p_path = os.path.join(page_route, page_name)
+            if not os.path.exists(p_path):
+                continue
+            cnt, min_v = 1, 0
+            for i in os.listdir(p_path):
+                min_v += abs(recog.match(screen, os.path.join(p_path, i))['min_val'])
+            min_v /= cnt
+            print(min_v, page_name)
+            if min_v < 1e-9 and min_v < min_val:
+                min_val = min_v
+                min_page = page_name
+        self.cur_page = min_page
 
     def start(self):
         while True:
+            time.sleep(1)
             self.update_stat()
             print('current status: %s' % self.cur_page)
             if self.cur_page == 'fin':
@@ -58,5 +71,7 @@ class D4Controller:
                 adb.click_btn(self.serial, 'close.png')
             elif self.cur_page == 'dl':
                 adb.click_btn(self.serial, 'download.png')
-            else:
-                time.sleep(2)
+            elif self.cur_page == 'bingo':
+                adb.click_btn(self.serial, 'pok.png')
+            elif self.cur_page == 'live':
+                time.sleep(1)

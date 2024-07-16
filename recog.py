@@ -5,17 +5,14 @@ page_route = 'template\\ui\\pages'
 
 
 def match(target: str, template: str):
-    print(template)
     target = cv2.imread(target)
     template = cv2.imread(template)
     t_height, t_width = template.shape[:2]
     result = cv2.matchTemplate(target, template, cv2.TM_SQDIFF_NORMED)
     cv2.normalize(result, result, 0, 1, cv2.NORM_MINMAX, -1)
     min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(result)
-    print(min_val)
-    flag = (abs(min_val) <= 1e-10)
     return {
-        "flag": flag,
+        "min_val": min_val,
         "min_loc": min_loc,
         "max_loc": max_loc,
         "height": t_height,

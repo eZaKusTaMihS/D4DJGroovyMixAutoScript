@@ -14,13 +14,12 @@ def get_cur_screen(serial: str, screen_dir: str):
 
 def click_btn(serial: str, btn: str):
     btn_data = recog.match('temp\\cur_screen.png', os.path.join(btn_route, btn))
-    if btn_data['flag']:
-        print(btn_data)
-        cx = np.random.randint(0, btn_data['width']) + btn_data['min_loc'][0]
-        cy = np.random.randint(0, btn_data['height']) + btn_data['min_loc'][1]
-        execute('e: & cd e:/MuMuPlayer-12.0/shell & adb.exe connect 127.0.0.1:%s & '
-                'adb shell input tap %s %s' % (serial, cx, cy))
-        print('click at position (%s, %s)' % (cx, cy))
+    print(btn_data)
+    cx = np.random.randint(0, btn_data['width']) + btn_data['min_loc'][0]
+    cy = np.random.randint(0, btn_data['height']) + btn_data['min_loc'][1]
+    execute('e: & cd e:/MuMuPlayer-12.0/shell & adb.exe connect 127.0.0.1:%s & '
+            'adb shell input tap %s %s' % (serial, cx, cy))
+    print('click at position (%s, %s)' % (cx, cy))
 
 
 def execute(statement: str) -> bool:
