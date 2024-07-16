@@ -1,6 +1,7 @@
 import os, time
 import recog
 import adb_control as adb
+import numpy as np
 
 page_route = 'template\\ui\\pages'
 
@@ -49,7 +50,7 @@ class D4Controller:
 
     def start(self):
         while True:
-            time.sleep(1)
+            time.sleep(np.random.random() + 0.8)
             self.update_stat()
             print('current status: %s' % self.cur_page)
             if self.cur_page == 'fin':
