@@ -75,3 +75,7 @@ class D4Controller:
                 adb.click_btn(self.serial, 'pok.png')
             elif self.cur_page == 'live':
                 time.sleep(4)
+            elif self.cur_page == 'network_err':
+                print('Network Error. Retry after 5 sec')
+                adb.click_btn(self.serial, 'retry.png')
+                time.sleep(4)
