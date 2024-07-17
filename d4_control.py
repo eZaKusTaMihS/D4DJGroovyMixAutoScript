@@ -6,24 +6,22 @@ import numpy as np
 page_route = 'template\\ui\\pages'
 
 
-def get_screen() -> str:
-    sc_path = os.path.join(os.getcwd(), 'temp\\cur_screen.png')
-    adb.get_cur_screen('16416', sc_path)
-    return sc_path
-    # return 'template\\select.png'
-
-
 class D4Controller:
     screen = None
-    serial = '16416'
+    serial = '127.0.0.1:16416'
     pages = ['okpop', 'closepop', 'again', 'select', 'prepare', 'live', 'bingo', 'network_err', 'dl', 'loading',
              'livein', 'main', 'next']
     cur_page = "none"
     voltage = 0
     event_pt = 0
 
-    def __init__(self, serial='16416'):
+    def __init__(self, serial='127.0.0.1:16416'):
         self.serial = serial
+
+    def get_screen(self) -> str:
+        sc_path = os.path.join(os.getcwd(), 'temp\\cur_screen.png')
+        adb.get_cur_screen(self.serial, sc_path)
+        return sc_path
 
     def get_stat(self) -> dict:
         self.update_stat()
@@ -34,7 +32,7 @@ class D4Controller:
         }
 
     def update_stat(self) -> None:
-        self.screen = get_screen()
+        self.screen = self.get_screen()
         min_val = 100
         min_page = 'none'
         for page_name in self.pages:
@@ -49,7 +47,6 @@ class D4Controller:
                 min_val = min_v
                 min_page = page_name
         self.cur_page = min_page
-        print(self.cur_page)
 
     def react_page(self, page: str):
         # Handle Unexpected situations
@@ -95,7 +92,19 @@ class D4Controller:
         if page == 'live':
             time.sleep(5)
             return
-        adb.click(self.serial, (1620, 980), 50, 30)
+        # Handle default situation
+        if adb.click_btn(self.serial, 'close.png'):
+            print('close')
+            return
+        if adb.click_btn(self.serial, 'ok.png'):
+            print('ok')
+            return
+        if adb.click_btn(self.serial, 'next.png'):
+            print('next')
+            return
+        if adb.click_btn(self.serial, 'pok.png'):
+            print('pok')
+            return
 
     def start(self):
         while True:

@@ -4,17 +4,20 @@ import recog
 import numpy as np
 
 btn_route = 'template\\ui\\btn'
+m_lim = 1e-10
 
 
 def get_cur_screen(serial: str, screen_dir: str):
     execute('e: & cd e:/MuMuPlayer-12.0/shell & '
-            'adb -s 127.0.0.1:%s exec-out screencap -p > %s' % (serial, screen_dir))
+            'adb -s %s exec-out screencap -p > %s' % (serial, screen_dir))
 
 
-def click_btn(serial: str, btn: str):
+def click_btn(serial: str, btn: str, lim: float = m_lim) -> bool:
     btn_data = recog.match('temp\\cur_screen.png', os.path.join(btn_route, btn))
-    if recog.matches_dt(btn_data):
+    if recog.matches_dt(btn_data, lim):
         click(serial, btn_data['min_loc'], btn_data['width'], btn_data['height'])
+        return True
+    return False
 
 
 def click(serial: str, pos: tuple[int, int], width: int, height: int):
@@ -25,7 +28,7 @@ def click(serial: str, pos: tuple[int, int], width: int, height: int):
     cx = np.random.randint(0, width) + pos[0]
     cy = np.random.randint(0, height) + pos[1]
     execute('e: & cd e:/MuMuPlayer-12.0/shell & '
-            'adb -s 127.0.0.1:%s shell input tap %s %s' % (serial, cx, cy))
+            'adb -s %s shell input tap %s %s' % (serial, cx, cy))
     print('mouse click @ (%s, %s)' % (cx, cy))
 
 
