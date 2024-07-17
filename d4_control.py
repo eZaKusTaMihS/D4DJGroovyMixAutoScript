@@ -1,6 +1,6 @@
 import os, time
-import recog
 import adb_control as adb
+import img_process as ip
 import numpy as np
 
 page_route = 'template\\ui\\page'
@@ -41,7 +41,7 @@ class D4Controller:
                 continue
             cnt, min_v = 1, 0
             for i in os.listdir(p_path):
-                min_v += abs(recog.match(self.screen, os.path.join(p_path, i))['min_val'])
+                min_v += ip.match(self.screen, os.path.join(p_path, i))['min_val']
             min_v /= cnt
             if min_v < 1e-9 and min_v < min_val:
                 min_val = min_v
@@ -67,7 +67,7 @@ class D4Controller:
         if page == 'title':
             adb.click(self.serial, (640, 360), 0, 0)
         if page == 'select':
-            if not recog.matches(self.screen, 'template\\content\\select\\akeba.png'):
+            if not ip.matches(self.screen, 'template\\content\\select\\akeba.png'):
                 adb.click_btn(self.serial, 'akeba.png')
                 time.sleep(0.3)
             adb.click_btn(self.serial, 'decide.png')

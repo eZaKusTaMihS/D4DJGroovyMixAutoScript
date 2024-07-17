@@ -1,6 +1,7 @@
 import cv2
-import os, time
+import easyocr
 
+# reader = easyocr.Reader(['jp', 'en'])
 page_route = 'template\\ui\\page'
 m_lim = 1e-9
 

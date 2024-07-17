@@ -1,6 +1,6 @@
 import os
 import subprocess
-import recog
+import img_process as ip
 import numpy as np
 
 btn_route = 'template\\ui\\btn'
@@ -15,8 +15,8 @@ def get_cur_screen(serial: str, screen_dir: str):
 def click_btn(serial: str, btn: str, lim: float = m_lim) -> bool:
     cl_path = 'temp\\cl_screen.png'
     get_cur_screen(serial, os.path.join(os.getcwd(), cl_path))
-    btn_data = recog.match(cl_path, os.path.join(btn_route, btn))
-    if recog.matches_dt(btn_data, lim):
+    btn_data = ip.match(cl_path, os.path.join(btn_route, btn))
+    if ip.matches_dt(btn_data, lim):
         click(serial, btn_data['min_loc'], btn_data['width'], btn_data['height'])
         return True
     return False
