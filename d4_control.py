@@ -3,14 +3,14 @@ import recog
 import adb_control as adb
 import numpy as np
 
-page_route = 'template\\ui\\pages'
+page_route = 'template\\ui\\page'
 
 
 class D4Controller:
     screen = None
     serial = '127.0.0.1:16416'
     pages = ['okpop', 'closepop', 'again', 'select', 'prepare', 'live', 'bingo', 'network_err', 'dl', 'loading',
-             'livein', 'main', 'next']
+             'livein', 'main', 'next', 'title']
     cur_page = "none"
     voltage = 0
     event_pt = 0
@@ -64,17 +64,20 @@ class D4Controller:
             adb.click_btn(self.serial, 'ok.png')
             return
         # Process normal pages
+        if page == 'title':
+            adb.click(self.serial, (640, 360), 0, 0)
         if page == 'select':
             if not recog.matches(self.screen, 'template\\content\\select\\akeba.png'):
                 adb.click_btn(self.serial, 'akeba.png')
                 time.sleep(0.3)
-            adb.click_btn(self.serial, 'select.png')
+            adb.click_btn(self.serial, 'decide.png')
             return
         if page == 'main':
             adb.click_btn(self.serial, 'golive.png')
             return
         if page == 'next':
             adb.click_btn(self.serial, 'next.png')
+            time.sleep(2)
             return
         if page == 'prepare':
             adb.click_btn(self.serial, 'start.png')
@@ -111,4 +114,4 @@ class D4Controller:
             self.update_stat()
             print('current status: %s' % self.cur_page)
             self.react_page(self.cur_page)
-            time.sleep(np.random.random() + 0.2)
+            time.sleep(np.random.random() / 2 + 0.5)

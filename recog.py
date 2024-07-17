@@ -1,8 +1,8 @@
 import cv2
 import os, time
 
-page_route = 'template\\ui\\pages'
-m_lim = 1e-10
+page_route = 'template\\ui\\page'
+m_lim = 1e-9
 
 
 def match(target: str, template: str) -> dict:

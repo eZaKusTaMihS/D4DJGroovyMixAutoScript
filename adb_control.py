@@ -4,7 +4,7 @@ import recog
 import numpy as np
 
 btn_route = 'template\\ui\\btn'
-m_lim = 1e-10
+m_lim = 1e-9
 
 
 def get_cur_screen(serial: str, screen_dir: str):
@@ -13,7 +13,9 @@ def get_cur_screen(serial: str, screen_dir: str):
 
 
 def click_btn(serial: str, btn: str, lim: float = m_lim) -> bool:
-    btn_data = recog.match('temp\\cur_screen.png', os.path.join(btn_route, btn))
+    cl_path = 'temp\\cl_screen.png'
+    get_cur_screen(serial, os.path.join(os.getcwd(), cl_path))
+    btn_data = recog.match(cl_path, os.path.join(btn_route, btn))
     if recog.matches_dt(btn_data, lim):
         click(serial, btn_data['min_loc'], btn_data['width'], btn_data['height'])
         return True
