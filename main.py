@@ -1,11 +1,12 @@
 from d4_control import D4Controller
-import adb_control as adb
+from adb_control import AdbController
 
 
 def main():
     serial = '127.0.0.1:16416'  # Emulator Serial (See your emulator config)
     # Connect adb
-    adb.execute('e: & cd e:/MuMuPlayer-12.0/shell & adb.exe connect %s' % serial)
+    adb = AdbController(serial)
+    adb.connect_device()
     # Start controller
     controller = D4Controller(serial)
     controller.start()
