@@ -1,4 +1,6 @@
-import os, time
+import os
+import time
+
 from adb_control import AdbController
 from img_process import ImgProcessor
 
@@ -11,7 +13,8 @@ ip = ImgProcessor()
 class D4Controller:
     screen = None
     serial = '127.0.0.1:16416'
-    pages = ['okpop', 'closepop', 'next', 'bingo', 'select', 'prepare', 'again', 'livein', 'main', 'title', 'live']
+    pages = ['okpop', 'closepop', 'next', 'bingo', 'select', 'prepare', 'again', 'net_err', 'livein', 'main', 'title',
+             'live']
     cur_page = 'none'
     last_page = 'none'
     voltage = 0
@@ -101,9 +104,10 @@ class D4Controller:
         if page == 'loading':
             time.sleep(1)
             return
-        if page == 'network_err':
+        if page == 'net_err':
             print('Network Error.')
-            time.sleep(4)
+            adb.click_btn('retry')
+            # time.sleep(4)
             return
         if page == 'closepop':
             if not adb.click_btn('close.png'):
@@ -133,7 +137,7 @@ class D4Controller:
             adb.click_btn('start.png')
             return
         if page == 'again':
-            adb.click_btn( 'again.png')
+            adb.click_btn('again.png')
             time.sleep(1.5)
             return
         if page == 'bingo':
@@ -141,6 +145,7 @@ class D4Controller:
             return
         if page == 'livein':
             adb.click_btn('livein.png')
+            time.sleep(2)
             return
         if page == 'live':
             time.sleep(2)
