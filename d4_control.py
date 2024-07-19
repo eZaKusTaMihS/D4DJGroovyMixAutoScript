@@ -28,11 +28,10 @@ class D4Controller:
             if self.cur_page != self.last_page:
                 print('current status: %s' % self.cur_page)
             self.__react_page(self.cur_page)
+            dt += (time.time() - ct)
             if self.cur_page == 'prepare' and self.last_page == 'select':
                 print('Loop time cost: %.2fs' % dt)
                 dt = 0
-            else:
-                dt += (time.time() - ct)
             # time.sleep(np.random.random() / 2 + 0.5)
 
     def get_stat(self) -> dict:
